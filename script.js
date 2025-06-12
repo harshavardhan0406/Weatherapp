@@ -23,18 +23,17 @@ search.addEventListener('click', () => {
 
     fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIKey}`)
         .then(response => response.json())
-        .then(json => { 
+        .then(json => {
             if (json.cod === '404') {
                 cityHide.textContent = city;
                 container.style.height = '400px';
                 weatherBox.classList.remove('active');
                 weatherDetails.classList.remove('active');
                 error404.classList.add('active');
-                removeOldClones(); // Ensure old clones are removed
+                removeOldClones();
                 return;
             }
 
-            // Update weather data
             const image = document.querySelector('.weather-box img');
             const temperature = document.querySelector('.weather-box .temperature');
             const description = document.querySelector('.weather-box .description');
@@ -48,8 +47,6 @@ search.addEventListener('click', () => {
                 weatherBox.classList.add('active');
                 weatherDetails.classList.add('active');
                 error404.classList.remove('active');
-
-                // Remove old clones
                 removeOldClones();
 
                 setTimeout(() => {
@@ -61,32 +58,17 @@ search.addEventListener('click', () => {
                 humidity.innerHTML = `${json.main.humidity}%`;
                 wind.innerHTML = `${Math.round(json.wind.speed)} km/h`;
 
-                // Set the appropriate image based on the weather condition
                 switch (json.weather[0].main) {
-                    case 'Clear':
-                        image.src = 'image/clear.png';
-                        break;
-                    case 'Rain':
-                        image.src = 'image/rain.png';
-                        break;
-                    case 'Snow':
-                        image.src = 'image/snow.png';
-                        break;
-                    case 'Clouds':
-                        image.src = 'image/cloud.png';
-                        break;
+                    case 'Clear': image.src = 'image/clear.png'; break;
+                    case 'Rain': image.src = 'image/rain.png'; break;
+                    case 'Snow': image.src = 'image/snow.png'; break;
+                    case 'Clouds': image.src = 'image/cloud.png'; break;
                     case 'Mist':
-                    case 'Haze':
-                        image.src = 'image/mist.png';
-                        break;
-                    case 'Drizzle':
-                        image.src = 'image/drizzle.png';
-                        break;
-                    default:
-                        image.src = 'image/cloud.png';
+                    case 'Haze': image.src = 'image/mist.png'; break;
+                    case 'Drizzle': image.src = 'image/drizzle.png'; break;
+                    default: image.src = 'image/cloud.png';
                 }
 
-                // Clone the elements
                 const infoWeather = document.querySelector('.weather-box .info-weather');
                 const infoHumidity = document.querySelector('.weather-details .humidity .info-humidity');
                 const infoWind = document.querySelector('.weather-details .wind .info-wind');
@@ -104,7 +86,6 @@ search.addEventListener('click', () => {
                 elCloneInfoHumidity.classList.add('active-clone');
                 elCloneInfoWind.classList.add('active-clone');
 
-                // Insert cloned elements after the original ones with a delay
                 setTimeout(() => {
                     infoWeather.insertAdjacentElement("afterend", elCloneInfoWeather);
                     infoHumidity.insertAdjacentElement("afterend", elCloneInfoHumidity);
